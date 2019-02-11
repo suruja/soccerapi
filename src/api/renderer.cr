@@ -6,7 +6,7 @@ class Api::Renderer
   def initialize(@data)
   end
 
-  def render
+  def render : String
     JSON.build do |json|
       json.array do
         data.each do |item|

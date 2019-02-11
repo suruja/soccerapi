@@ -10,7 +10,7 @@ class Api::Filterer
   def initialize(@data, @date, @team, @before, @after, @home, @visitor)
   end
 
-  def filter
+  def filter : Api::Matchs
     data.select do |item|
       keep = date ? (item["date"] == date) : true
       keep &= before ? (item["date"] <= before.as(String)) : true
