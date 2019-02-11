@@ -51,10 +51,11 @@ class ApiConsumer
     end
   end
 
-  def to_json
+  def render(date : String | Nil = nil)
+    result = date ? data.select { |item| item[:date] == date } : data
     JSON.build do |json|
       json.array do
-        data.each do |item|
+        result.each do |item|
           json.object do
             item.each do |key, val|
               json.field key, val

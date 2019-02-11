@@ -3,10 +3,18 @@ require "./api_consumer"
 
 consumer = ApiConsumer.new
 
-get "/" do |env|
+before_all do |env|
+  puts "Setting response content type"
   env.response.content_type = "application/json"
   consumer.reset!
-  consumer.to_json
+end
+
+get "/" do
+  consumer.render
+end
+
+get "/:date" do |env|
+  consumer.render(env.params.url["date"])
 end
 
 Kemal.run
