@@ -1,5 +1,4 @@
-require "http/server"
-require "option_parser"
+require "kemal"
 require "crystagiri"
 require "json"
 
@@ -36,19 +35,13 @@ module App
   end
 end
 
-port = 8080
-
-OptionParser.parse! do |opts|
-  opts.on("-p PORT", "--port PORT", "define port to run server") do |opt|
-    port = opt.to_i
-  end
+before_get "/" do |env|
+  puts "Setting response content type"
+  env.response.content_type = "application/json"
 end
 
-server = HTTP::Server.new do |context|
-  context.response.content_type = "application/json"
-  context.response.print App::Fetcher.new.run
+get "/" do
+  App::Fetcher.new.run
 end
 
-address = server.bind_tcp port
-puts "Listening on http://#{address}"
-server.listen
+Kemal.run

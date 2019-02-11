@@ -16,3 +16,5 @@ dependencies:
   crystagiri:
     github: madeindjs/crystagiri
     branch: master
+  kemal:
+    github: kemalcr/kemal
