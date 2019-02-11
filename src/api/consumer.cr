@@ -1,18 +1,14 @@
 require "crystagiri"
-require "json"
 
-class ApiConsumer
-  SOURCE_URL  = "http://www.maxifoot.fr/calendrier-ligue1-2018-2019.htm"
-  DATE_FORMAT = "%y%m%d"
-
+class Api::Consumer
   property document : Crystagiri::HTML
-  property data : Array(NamedTuple(date: String, home: String, visitor: String, score: String | Nil))
+  property data : Api::Matchs
   property memoized_date : String
 
   def initialize
-    @document = Crystagiri::HTML.from_url SOURCE_URL
-    @data = [] of NamedTuple(date: String, home: String, visitor: String, score: String | Nil)
-    @memoized_date = Time.now.to_s(DATE_FORMAT)
+    @document = Crystagiri::HTML.from_url Api::SOURCE_URL
+    @data = [] of Api::Match
+    @memoized_date = Time.now.to_s(Api::DATE_FORMAT)
     parse
   end
 
@@ -38,13 +34,13 @@ class ApiConsumer
   end
 
   def reset
-    @document = Crystagiri::HTML.from_url SOURCE_URL
-    @data = [] of NamedTuple(date: String, home: String, visitor: String, score: String | Nil)
+    @document = Crystagiri::HTML.from_url Api::SOURCE_URL
+    @data = [] of Api::Match
     parse
   end
 
   def reset!
-    current_date = Time.now.to_s(DATE_FORMAT)
+    current_date = Time.now.to_s(Api::DATE_FORMAT)
     if current_date != @memoized_date
       @memoized_date = current_date
       reset
@@ -53,16 +49,6 @@ class ApiConsumer
 
   def render(date : String | Nil = nil)
     result = date ? data.select { |item| item[:date] == date } : data
-    JSON.build do |json|
-      json.array do
-        result.each do |item|
-          json.object do
-            item.each do |key, val|
-              json.field key, val
-            end
-          end
-        end
-      end
-    end
+    Api::Renderer.new(result).render
   end
 end

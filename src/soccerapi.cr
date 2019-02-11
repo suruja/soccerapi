@@ -1,7 +1,7 @@
 require "kemal"
-require "./api_consumer"
+require "./api"
 
-consumer = ApiConsumer.new
+consumer = Api::Consumer.new
 
 before_all do |env|
   puts "Setting response content type"
@@ -9,12 +9,16 @@ before_all do |env|
   consumer.reset!
 end
 
-get "/" do
-  consumer.render
-end
-
-get "/:date" do |env|
-  consumer.render(env.params.url["date"])
+get "/" do |env|
+  filterer = Api::Filterer.new(
+    data: consumer.data.as(Api::Matchs),
+    date: env.params.query.fetch("date", nil),
+    team: env.params.query.fetch("team", nil),
+  )
+  renderer = Api::Renderer.new(
+    data: filterer.filter,
+  )
+  renderer.render
 end
 
 Kemal.run
