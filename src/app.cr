@@ -1,9 +1,9 @@
-require "./soccer_api"
 require "kemal"
+require "./api"
 
 get "/" do |env|
   env.response.content_type = "application/json"
-  SoccerApi.fetch
+  Api.fetch
 end
 
 Kemal.run

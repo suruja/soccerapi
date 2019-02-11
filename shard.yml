@@ -1,11 +1,11 @@
-name: ligue1api
+name: soccerapi
 version: 0.1.0
 
 authors:
   - suruja <sebstp@gmail.com>
 
 targets:
-  ligue1api:
+  app:
     main: src/app.cr
 
 crystal: 0.27.0

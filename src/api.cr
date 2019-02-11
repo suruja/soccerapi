@@ -1,7 +1,7 @@
 require "crystagiri"
 require "json"
 
-class SoccerApi
+class Api
   SOURCE_URL = "http://www.maxifoot.fr/calendrier-ligue1-2018-2019.htm"
 
   def self.fetch
