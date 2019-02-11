@@ -35,12 +35,8 @@ module App
   end
 end
 
-before_get "/" do |env|
-  puts "Setting response content type"
-  env.response.content_type = "application/json"
-end
-
 get "/" do
+  env.response.content_type = "application/json"
   App::Fetcher.new.run
 end
 
