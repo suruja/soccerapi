@@ -13,6 +13,7 @@ class Api::Filterer
   end
 
   def filter : Api::Matchs
+    return data if !date && !before && !after && !team && !home && !visitor
     data.select do |item|
       Api::Filter.new(date).eval { |v| item["date"] == v } &&
         Api::Filter.new(before).eval { |v| item["date"] <= v } &&
