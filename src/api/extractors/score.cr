@@ -12,7 +12,7 @@ class Api::Extractors::Score
   end
 
   def extract : Api::Score
-    if data.match(/^[0-9]+\-[0-9]+$/)
+    if data =~ /^[0-9]+\-[0-9]+$/
       @score = data
       @home_score, @visitor_score = data.split("-").map { |i| i.to_u8 }
     end
@@ -21,7 +21,7 @@ class Api::Extractors::Score
 
   def render : Api::Score
     {
-      score:         data,
+      score:         score,
       home_score:    home_score,
       visitor_score: visitor_score,
     }
