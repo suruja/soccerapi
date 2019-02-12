@@ -1,11 +1,11 @@
 class Api::Filterer
   property data : Api::Matchs
-  property date : String | Nil
-  property before : String | Nil
-  property after : String | Nil
-  property team : String | Nil
-  property home : String | Nil
-  property visitor : String | Nil
+  property date : String?
+  property before : String?
+  property after : String?
+  property team : String?
+  property home : String?
+  property visitor : String?
 
   def initialize(@data, @date, @team, @before, @after, @home, @visitor)
   end
