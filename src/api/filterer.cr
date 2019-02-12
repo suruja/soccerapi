@@ -1,3 +1,5 @@
+require "./filter"
+
 class Api::Filterer
   property data : Api::Matchs
   property date : String?
@@ -12,13 +14,12 @@ class Api::Filterer
 
   def filter : Api::Matchs
     data.select do |item|
-      keep = date ? (item["date"] == date) : true
-      keep &= before ? (item["date"] <= before.as(String)) : true
-      keep &= after ? (item["date"] >= after.as(String)) : true
-      keep &= team ? ((item["home"] == team) || (item["visitor"] == team)) : true
-      keep &= home ? (item["home"] == team) : true
-      keep &= visitor ? (item["visitor"] == team) : true
-      keep
+      Api::Filter.new(date).eval { |v| item["date"] == v } &&
+        Api::Filter.new(before).eval { |v| item["date"] <= v } &&
+        Api::Filter.new(after).eval { |v| item["date"] >= v } &&
+        Api::Filter.new(team).eval { |v| (item["home"] == v) || (item["visitor"] == v) } &&
+        Api::Filter.new(home).eval { |v| item["home"] == v } &&
+        Api::Filter.new(visitor).eval { |v| item["visitor"] == v }
     end
   end
 end
