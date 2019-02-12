@@ -1,4 +1,7 @@
 require "crystagiri"
+require "./extractors/date"
+require "./extractors/score"
+require "./extractors/team"
 
 class Api::Parser
   property document : Crystagiri::HTML
@@ -11,42 +14,18 @@ class Api::Parser
 
   def parse
     document.css("table.cd1") do |day|
-      str_date = ""
-      day_doc = Crystagiri::HTML.new(day.node.to_s)
-      day_doc.css(".ch3") { |t| str_date = extract_date(t.content) }
-      date = parse_date(str_date)
-      day_doc.css("tr.cl2") do |match|
-        match_doc = Crystagiri::HTML.new(match.node.to_s)
-        mdata = [] of String
-        match_doc.css("td") { |t| mdata.push(t.content.strip) }
-        match_doc.css("th") { |t| mdata.push(t.content.strip) }
+      ddoc = Crystagiri::HTML.new(day.node.to_s)
+      ddate = ddoc.css(".ch3") { }.first.content
+      ddoc.css("tr.cl2") do |match|
+        mdoc = Crystagiri::HTML.new(match.node.to_s)
+        mdata = (mdoc.css("td") { } + mdoc.css("th") { }).map { |t| t.content }
+        mscore = Api::Extractors::Score.new(mdata[2]).extract
         data.push({
-          date:    date.to_s("%Y-%m-%d"),
-          home:    mdata[0],
-          visitor: mdata[1],
-        }.merge(extract_score(mdata[2])))
+          date:    Api::Extractors::Date.new(ddate).extract.to_s("%Y-%m-%d"),
+          home:    Api::Extractors::Team.new(mdata[0]).extract,
+          visitor: Api::Extractors::Team.new(mdata[1]).extract,
+        }.merge(mscore))
       end
     end
-  end
-
-  private def extract_score(score) : Api::Score
-    if score.match(/^[0-9]+\-[0-9]+$/)
-      home_score, visitor_score = score.split("-").map { |i| i.to_u8 }
-      {score: score, home_score: home_score, visitor_score: visitor_score}
-    else
-      {score: nil, home_score: nil, visitor_score: nil}
-    end
-  end
-
-  private def extract_date(str)
-    str.strip[-10, 10]
-  end
-
-  private def parse_date(str)
-    Time.parse(
-      str,
-      "%d/%m/%Y",
-      Time::Location.load("Europe/Paris")
-    )
   end
 end

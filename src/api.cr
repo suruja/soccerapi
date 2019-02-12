@@ -7,6 +7,7 @@ require "./api/consumer"
 module Api
   SOURCE_URL  = "http://www.maxifoot.fr/calendrier-ligue1-2018-2019.htm"
   DATE_FORMAT = "%y%m%d"
+  TIME_ZONE   = "Europe/Paris"
   alias Score = NamedTuple(
     score: String?,
     home_score: UInt8?,
