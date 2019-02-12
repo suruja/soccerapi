@@ -11,6 +11,8 @@ module Api
     home: String,
     visitor: String,
     score: String | Nil,
+    home_score: UInt8 | Nil,
+    visitor_score: UInt8 | Nil,
   )
   alias Matchs = Array(Match)
 end
