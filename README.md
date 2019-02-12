@@ -29,7 +29,7 @@ Data can be filtered using query params:
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/./fork>)
+1. Fork it (<https://github.com/suruja/soccerapi/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -37,4 +37,4 @@ Data can be filtered using query params:
 
 ## Contributors
 
-- [suruja](https://github.com/your-github-user) - creator and maintainer
+- [suruja](https://github.com/suruja) - creator and maintainer
