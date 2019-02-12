@@ -29,7 +29,7 @@ class Api::Parser
     end
   end
 
-  private def extract_score(score) : NamedTuple(score: String | Nil, home_score: UInt8 | Nil, visitor_score: UInt8 | Nil)
+  private def extract_score(score) : Api::Score
     if score.match(/^[0-9]+\-[0-9]+$/)
       home_score, visitor_score = score.split("-").map { |i| i.to_u8 }
       {score: score, home_score: home_score, visitor_score: visitor_score}

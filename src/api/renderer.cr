@@ -1,4 +1,5 @@
 require "json"
+require "../core_ext"
 
 class Api::Renderer
   property data : Api::Matchs
@@ -12,7 +13,7 @@ class Api::Renderer
         data.each do |item|
           json.object do
             item.each do |key, val|
-              json.field key, val
+              json.field key.to_s.lowercamelcase, val
             end
           end
         end
