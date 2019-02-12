@@ -12,6 +12,7 @@ class Api::Consumer
   end
 
   def reset
+    puts "Fetching #{Api::SOURCE_URL}..."
     initialize
   end
 
